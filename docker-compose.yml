@@ -25,7 +25,7 @@ services:
     restart: always
     command: --log-dir /app/logs
     ports:
-      - "127.0.0.1:3000:3000"
+      - "3000:3000"
     environment:
       - SQL_DSN=root:buildingblocks@tcp(mysql:3306)/new-api
       - REDIS_CONN_STRING=redis://:buildingblocks@redis:6379

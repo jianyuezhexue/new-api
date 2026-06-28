@@ -25,8 +25,8 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     environment:
-      - SQL_DSN=root:buildingblocks@tcp(8.155.47.77:3306)/new-api
-      - REDIS_CONN_STRING=redis://:buildingblocks@8.155.47.77:6379
+      - SQL_DSN=root:buildingblocks@tcp(mysql:3306)/new-api
+      - REDIS_CONN_STRING=redis://:buildingblocks@redis:6379
       - TZ=Asia/Shanghai
       - ERROR_LOG_ENABLED=true
       - BATCH_UPDATE_ENABLED=true

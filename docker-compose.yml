@@ -1,6 +1,8 @@
 # New-API 生产环境 Docker Compose 配置
 # 使用 Dockerfile.runtime — 从预构建的 release/ 产物构建镜像。
 #
+# 前置条件: mysql 和 redis 容器已在 buildingblocks_default 网络中运行
+#
 # 快速开始:
 #   1. bash build.sh           # 构建前后端 → release/
 #   2. docker compose up -d    # 构建镜像并启动
@@ -33,7 +35,7 @@ services:
       - NODE_NAME=new-api-node-1
       - PORT=3000
       # - SESSION_SECRET=random_string  # 多节点部署时必须设置此随机字符串
-      # - LOG_SQL_DSN=root:buildingblocks@tcp(8.155.47.77:3306)/new-api-log
+      # - LOG_SQL_DSN=root:buildingblocks@tcp(mysql:3306)/new-api-log
     volumes:
       - ./release:/app
       - ./logs:/app/logs

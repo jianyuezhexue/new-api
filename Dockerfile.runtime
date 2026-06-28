@@ -1,0 +1,18 @@
+# 运行时镜像：从 release/ 目录获取预构建的二进制文件
+# 前端已通过 //go:embed 嵌入到 Go 二进制中，
+# 因此运行时只需要 server 二进制文件。
+FROM alpine:latest
+
+# 使用清华镜像源加速，安装运行时依赖
+RUN sed -i 's#https://dl-cdn.alpinelinux.org#https://mirrors.tuna.tsinghua.edu.cn#g' /etc/apk/repositories \
+    && apk add --no-cache tzdata curl ca-certificates \
+    && update-ca-certificates
+
+WORKDIR /app
+
+# 从本地 release/ 目录复制预构建的 server 二进制
+COPY release/server /app/server
+
+EXPOSE 3000
+
+ENTRYPOINT ["/app/server"]

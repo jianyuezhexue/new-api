@@ -1,12 +1,13 @@
-# Backend-only build for frontend development
-# Skips frontend build, uses a placeholder for //go:embed web/dist
+# 后端开发构建 — 跳过前端构建，使用占位页面
+# 前端由 Rsbuild 开发服务器独立提供
 
 FROM golang:1.26.1-alpine AS builder
 
 ENV GO111MODULE=on CGO_ENABLED=0
 ARG TARGETOS
 ARG TARGETARCH
-ENV GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64}
+ARG GOPROXY
+ENV GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} GOPROXY=${GOPROXY:-https://proxy.golang.org,direct}
 ENV GOEXPERIMENT=greenteagc
 
 WORKDIR /build
@@ -16,9 +17,10 @@ RUN go mod download
 
 COPY . .
 
+# 创建占位 dist 目录，满足 //go:embed 要求
 RUN mkdir -p web/default/dist web/classic/dist && \
-    echo '<!doctype html><html><head><title>dev</title></head><body>use frontend dev server</body></html>' > web/default/dist/index.html && \
-    echo '<!doctype html><html><head><title>dev</title></head><body>use frontend dev server</body></html>' > web/classic/dist/index.html
+    echo '<!doctype html><html><head><title>dev</title></head><body>请使用前端开发服务器</body></html>' > web/default/dist/index.html && \
+    echo '<!doctype html><html><head><title>dev</title></head><body>请使用前端开发服务器</body></html>' > web/classic/dist/index.html
 
 RUN go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(cat VERSION)'" -o new-api
 

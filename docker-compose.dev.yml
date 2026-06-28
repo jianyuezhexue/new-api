@@ -33,6 +33,7 @@ services:
       - REDIS_CONN_STRING=redis://:buildingblocks@8.155.47.77:6379
       - TZ=Asia/Shanghai
       - BATCH_UPDATE_ENABLED=true
+      - THEME=default
     networks:
       - dev-network
 

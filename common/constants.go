@@ -25,6 +25,14 @@ func init() {
 	themeValue.Store("classic")
 }
 
+// InitTheme reads the THEME environment variable and sets the active theme.
+// Accepted values: "default", "classic". Call this after flag.Parse().
+func InitTheme() {
+	if t := strings.TrimSpace(GetEnvOrDefaultString("THEME", "")); t != "" {
+		SetTheme(t)
+	}
+}
+
 func GetTheme() string {
 	return themeValue.Load().(string)
 }

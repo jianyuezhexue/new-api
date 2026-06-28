@@ -34,6 +34,7 @@ services:
       - BATCH_UPDATE_ENABLED=true
       - NODE_NAME=new-api-node-1
       - PORT=3000
+      - THEME=default
       # - SESSION_SECRET=random_string  # 多节点部署时必须设置此随机字符串
       # - LOG_SQL_DSN=root:buildingblocks@tcp(mysql:3306)/new-api-log
     volumes:

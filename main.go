@@ -273,6 +273,9 @@ func InitResources() error {
 	// 加载环境变量
 	common.InitEnv()
 
+	// 初始化前端主题（THEME 环境变量，默认 "classic"）
+	common.InitTheme()
+
 	logger.SetupLogger()
 
 	// Initialize model settings

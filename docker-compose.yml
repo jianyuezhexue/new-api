@@ -38,7 +38,6 @@ services:
       - ./release:/app
       - ./logs:/app/logs
     networks:
-      - default
       - buildingblocks_default
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1"]

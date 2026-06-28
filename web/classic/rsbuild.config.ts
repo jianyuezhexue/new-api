@@ -43,6 +43,9 @@ export default defineConfig(({ envMode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        // 强制使用 classic 本地的 date-fns v2（semi-ui 依赖），
+        // 避免被根目录的 date-fns v4 覆盖导致 date-fns-tz 解析失败
+        'date-fns': path.resolve(__dirname, 'node_modules/date-fns'),
         '@douyinfe/semi-ui/dist/css/semi.css': path.resolve(
           semiUiDir,
           'dist/css/semi.css',

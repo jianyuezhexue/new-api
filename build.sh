@@ -22,14 +22,11 @@ cd ../..
 
 echo "=== 构建前端（classic 主题）==="
 cd web/classic
-if bun run build; then
-    echo "classic 主题构建成功"
-else
-    echo "警告: classic 主题构建失败，使用占位页面"
-    mkdir -p dist
-    echo '<!doctype html><html><head><title>New API</title></head><body><h1>New API</h1><p>classic 主题构建不可用 — 请使用 default 主题。</p></body></html>' > dist/index.html
-fi
+bun run build
 cd ../..
+
+# rsbuild 清空了 dist 目录，重建 .gitkeep 以消除 //go:embed 警告
+touch web/default/dist/.gitkeep web/classic/dist/.gitkeep
 
 # -------------------- 后端构建 --------------------
 echo "=== 构建后端（linux/amd64）==="

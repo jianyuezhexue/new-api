@@ -43,6 +43,7 @@ services:
       - ./logs:/app/logs
     networks:
       - buildingblocks_default
+      - gateway
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1"]
       interval: 30s
@@ -51,4 +52,6 @@ services:
 
 networks:
   buildingblocks_default:
+    external: true
+  gateway:
     external: true

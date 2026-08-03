@@ -11,7 +11,7 @@ bash build.sh
 # 2. Git 提交
 echo ""
 echo "=== 第二步: Git 提交 ==="
-git add release/ Dockerfile.runtime docker-compose.yml build.sh push.sh
+git add .
 git commit -m "build: 更新 release 构建产物及部署文件" || echo "无变更需提交"
 
 # 3. Git 推送

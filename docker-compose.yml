@@ -1,14 +1,20 @@
 # New-API 生产环境 Docker Compose 配置
-# 使用 Dockerfile.runtime — 从预构建的 release/ 产物构建镜像。
+#
+# new-api (后端):      bash build.sh → release/server → Dockerfile.runtime
+# new-api-docs (文档):  多阶段 Dockerfile，构建 & 运行均在 Docker 内完成
+#                      BuildKit 自动缓存，源码不变则秒级构建
 #
 # 快速开始:
-#   1. bash build.sh           # 构建前后端 → release/
+#   1. bash build.sh           # 构建后端 & 前端 → release/
 #   2. docker compose up -d    # 构建镜像并启动
-#   3. 访问 http://localhost:3000
+#   3. 访问 http://localhost:3000 / 文档 http://localhost:3001
 #
 # 代码变更后更新:
-#   1. bash build.sh
+#   1. bash build.sh           # 仅 new-api 需要
 #   2. docker compose up -d --build
+#
+# 仅更新文档:
+#   docker compose up -d --build new-api-docs
 #
 # 停止:
 #   docker compose down

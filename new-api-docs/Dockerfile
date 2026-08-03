@@ -4,7 +4,7 @@
 # 和 Dockerfile.runtime 同模式：只 ADD，不 BUILD
 # ============================================
 
-FROM node:22-alpine
+FROM node:20-alpine
 WORKDIR /app
 
 ENV NODE_ENV=production

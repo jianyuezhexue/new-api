@@ -47,6 +47,19 @@ services:
       timeout: 10s
       retries: 3
 
+  # ── 文档站点（本地预构建 .next/standalone，镜像仅包含运行时） ──
+  new-api-docs:
+    build:
+      context: ./new-api-docs
+      dockerfile: Dockerfile
+    image: new-api-docs:latest
+    container_name: new-api-docs
+    restart: always
+    ports:
+      - "3001:3000"
+    networks:
+      - gateway
+
 networks:
   gateway:
     external: true

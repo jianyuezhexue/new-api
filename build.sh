@@ -43,9 +43,22 @@ else
     echo "=== 提示: 安装 upx 可进一步压缩二进制 ==="
 fi
 
+# -------------------- 文档站点构建 --------------------
+echo "=== 构建文档站点（Next.js standalone）==="
+cd "$SCRIPT_DIR/new-api-docs"
+bun install --frozen-lockfile
+bun run build
+
+# 验证 standalone 输出
+if [ ! -f "$SCRIPT_DIR/new-api-docs/.next/standalone/server.js" ]; then
+  echo "❌ 文档站点 standalone 输出缺失"
+  exit 1
+fi
+echo "✅ 文档站点 standalone: $(du -sh "$SCRIPT_DIR/new-api-docs/.next/standalone" | cut -f1)"
+
+# -------------------- 构建完成 --------------------
 echo ""
 echo "=== 构建完成 ==="
-ls -lh release/server
-echo ""
-echo "release/server  ($(du -h release/server | cut -f1))"
-echo "前端已通过 //go:embed 嵌入到二进制中"
+echo "  release/server                ($(du -h "$SCRIPT_DIR/release/server" | cut -f1))"
+echo "  文档站点 .next/standalone     ($(du -sh "$SCRIPT_DIR/new-api-docs/.next/standalone" | cut -f1))"
+echo "  前端已通过 //go:embed 嵌入到二进制中"

@@ -186,7 +186,7 @@ export function Hero() {
           )}
         >
           <Image
-            src="/assets/newapi.svg"
+            src="/assets/logo.png"
             alt="logo"
             width={288}
             height={288}

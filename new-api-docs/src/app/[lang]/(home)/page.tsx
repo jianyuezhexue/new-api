@@ -152,7 +152,7 @@ export default async function Page({
               {content.getStarted}
             </Link>
             <a
-              href="https://github.com/QuantumNous/new-api"
+              href="https://github.com/jianyuezhexue/build-block"
               target="_blank"
               rel="noreferrer noopener"
               className="bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3 font-medium tracking-tight transition-colors max-sm:text-sm"
@@ -161,7 +161,7 @@ export default async function Page({
               {content.github}
             </a>
             <a
-              href="https://atomgit.com/QuantumNous/new-api"
+              href=""
               target="_blank"
               rel="noreferrer noopener"
               className="bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent inline-flex items-center justify-center gap-2 rounded-full border px-5 py-3 font-medium tracking-tight transition-colors max-sm:text-sm"
@@ -248,12 +248,12 @@ export default async function Page({
         </h2>
         <div className="mt-8 flex justify-center">
           <a
-            href="https://github.com/QuantumNous/new-api/graphs/contributors"
+            href="https://github.com/jianyuezhexue/build-block/graphs/contributors"
             target="_blank"
             rel="noopener noreferrer"
           >
             <img
-              src="https://contrib.rocks/image?repo=QuantumNous/new-api"
+              src="https://contrib.rocks/image?repo=jianyuezhexue/build-block"
               alt="Development Contributors"
               loading="lazy"
               decoding="async"
@@ -270,12 +270,12 @@ export default async function Page({
         </h2>
         <div className="mt-8 flex justify-center">
           <a
-            href="https://github.com/QuantumNous/new-api-docs-v1/graphs/contributors"
+            href="https://github.com/jianyuezhexue/build-block/graphs/contributors"
             target="_blank"
             rel="noopener noreferrer"
           >
             <img
-              src="https://contrib.rocks/image?repo=QuantumNous/new-api-docs-v1"
+              src="https://contrib.rocks/image?repo=jianyuezhexue/build-block"
               alt="Documentation Contributors"
               loading="lazy"
               decoding="async"

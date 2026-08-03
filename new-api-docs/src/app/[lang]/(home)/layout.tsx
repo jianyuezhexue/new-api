@@ -152,21 +152,21 @@ export default async function Layout({
               icon: <Icon />,
             })),
           },
-          {
-            type: 'main',
-            on: 'menu',
-            text: texts.skills.text,
-            url: `${docsUrl}/skills`,
-            icon: <Puzzle />,
-          },
-          {
-            type: 'main',
-            on: 'menu',
-            text: texts.apiDocs.text,
-            url: 'https://apifox.newapi.ai/',
-            icon: <FileCode />,
-            external: true,
-          },
+          // {
+          //   type: 'main',
+          //   on: 'menu',
+          //   text: texts.skills.text,
+          //   url: `${docsUrl}/skills`,
+          //   icon: <Puzzle />,
+          // },
+          // {
+          //   type: 'main',
+          //   on: 'menu',
+          //   text: texts.apiDocs.text,
+          //   url: 'https://apifox.newapi.ai/',
+          //   icon: <FileCode />,
+          //   external: true,
+          // },
           // Desktop navigation
           {
             type: 'custom',
@@ -213,28 +213,28 @@ export default async function Layout({
               </NavbarMenu>
             ),
           },
-          {
-            type: 'custom',
-            on: 'nav',
-            children: (
-              <Link
-                href={`${docsUrl}/skills`}
-                className="inline-flex items-center gap-1.5 text-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground"
-              >
-                {texts.skills.text}
-                <span className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
-                  New
-                </span>
-              </Link>
-            ),
-          },
-          {
-            type: 'main',
-            on: 'nav',
-            text: texts.apiDocs.text,
-            url: 'https://apifox.newapi.ai/',
-            external: true,
-          },
+          // {
+          //   type: 'custom',
+          //   on: 'nav',
+          //   children: (
+          //     <Link
+          //       href={`${docsUrl}/skills`}
+          //       className="inline-flex items-center gap-1.5 text-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground"
+          //     >
+          //       {texts.skills.text}
+          //       <span className="rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
+          //         New
+          //       </span>
+          //     </Link>
+          //   ),
+          // },
+          // {
+          //   type: 'main',
+          //   on: 'nav',
+          //   text: texts.apiDocs.text,
+          //   url: 'https://apifox.newapi.ai/',
+          //   external: true,
+          // },
           ...linkItems,
         ]}
         className="flex-1 dark:bg-neutral-950 dark:[--color-fd-background:var(--color-neutral-950)]"

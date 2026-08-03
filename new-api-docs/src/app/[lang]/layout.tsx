@@ -90,7 +90,7 @@ export async function generateMetadata({
       'Intelligent API Management',
     ],
     authors: [
-      { name: 'build & block Team', url: 'https://github.com/QuantumNous/new-api' },
+      { name: 'build & block Team', url: 'https://github.com/jianyuezhexue/build-block' },
     ],
     creator: 'build & block Team',
     alternates: {

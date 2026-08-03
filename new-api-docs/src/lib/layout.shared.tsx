@@ -6,7 +6,7 @@ import type { LinkItemType } from 'fumadocs-ui/layouts/docs';
 export const linkItems: LinkItemType[] = [
   {
     type: 'icon',
-    url: 'https://github.com/QuantumNous/new-api',
+    url: 'https://github.com/jianyuezhexue/build-block',
     label: 'GitHub',
     text: 'GitHub',
     icon: (
@@ -23,7 +23,7 @@ export const linkItems: LinkItemType[] = [
   },
   {
     type: 'icon',
-    url: 'https://atomgit.com/QuantumNous/new-api',
+    url: '',
     label: 'AtomGit',
     text: 'AtomGit',
     icon: (

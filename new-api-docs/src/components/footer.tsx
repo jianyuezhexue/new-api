@@ -36,12 +36,12 @@ const ProductHuntIcon = (
 const socialLinks: { name: string; href: string; icon: React.ReactNode }[] = [
   {
     name: 'GitHub',
-    href: 'https://github.com/QuantumNous/new-api',
+    href: 'https://github.com/jianyuezhexue/build-block',
     icon: <Github className="size-4" />,
   },
   {
     name: 'AtomGit',
-    href: 'https://atomgit.com/QuantumNous/new-api',
+    href: '',
     icon: AtomGitIcon,
   },
   {

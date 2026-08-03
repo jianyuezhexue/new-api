@@ -1,8 +1,6 @@
 # New-API 生产环境 Docker Compose 配置
 # 使用 Dockerfile.runtime — 从预构建的 release/ 产物构建镜像。
 #
-# 前置条件: mysql 和 redis 容器已在 buildingblocks_default 网络中运行
-#
 # 快速开始:
 #   1. bash build.sh           # 构建前后端 → release/
 #   2. docker compose up -d    # 构建镜像并启动
@@ -27,8 +25,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - SQL_DSN=root:rm-f8z9q6emj4roz3w559o.mysql.rds.aliyuncs.com@tcp(mysql:3306)/new-api
-      - REDIS_CONN_STRING=redis://:8.155.47.77@redis:6379
+      - SQL_DSN=newApi:2$$VY-VXp3WCXW&@tcp(rm-f8z9q6emj4roz3w559o.mysql.rds.aliyuncs.com:3306)/new-api
+      - REDIS_CONN_STRING=redis://:buildingblocks@8.155.47.77:6379
       - TZ=Asia/Shanghai
       - ERROR_LOG_ENABLED=true
       - BATCH_UPDATE_ENABLED=true
@@ -42,7 +40,6 @@ services:
       - ./release:/app
       - ./logs:/app/logs
     networks:
-      - buildingblocks_default
       - gateway
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1"]
@@ -51,7 +48,5 @@ services:
       retries: 3
 
 networks:
-  buildingblocks_default:
-    external: true
   gateway:
     external: true

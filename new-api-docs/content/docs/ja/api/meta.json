@@ -1,6 +1,6 @@
 {
   "title": "APIリファレンス",
-  "description": "New API の完全なインターフェースドキュメント",
+  "description": "build & block の完全なインターフェースドキュメント",
   "icon": "Code",
   "root": true,
   "pages": ["index", "ai-model", "management"]

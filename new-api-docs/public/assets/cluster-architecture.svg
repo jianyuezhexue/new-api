@@ -76,5 +76,5 @@
   <text x="645" y="487" font-family="Arial" font-size="12" fill="#4a5568">Redis 缓存</text>
   
   <!-- 标题 -->
-  <text x="50" y="40" font-family="Arial" font-size="20" font-weight="bold" fill="#2d3748">New API 集群部署架构</text>
+  <text x="50" y="40" font-family="Arial" font-size="20" font-weight="bold" fill="#2d3748">build & block 集群部署架构</text>
 </svg>

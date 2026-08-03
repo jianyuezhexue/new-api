@@ -23,15 +23,15 @@
 //   }
 // > = {
 //   zh: {
-//     title: '谨防假冒 New API 官方服务',
+//     title: '谨防假冒 build & block 官方服务',
 //     summary:
-//       'New API 从未公开销售 API 服务，也未授权任何代理或经销商。请仅信任官方开源仓库。',
+//       'build & block 从未公开销售 API 服务，也未授权任何代理或经销商。请仅信任官方开源仓库。',
 //     sections: [
 //       {
 //         heading: '第一：官方绝未公开发售接口，谨防受骗！',
 //         body: (
 //           <>
-//             New API 为纯粹的开源项目，我司
+//             build & block 为纯粹的开源项目，我司
 //             <B>从未授权任何机构或个人开展代理或销售</B>。凡在外打着 &ldquo;New
 //             API 官方 / 合作方 / 自营&rdquo;旗号售卖 API 额度或中转服务的，
 //             <B>100% 均为假冒李鬼</B>
@@ -67,21 +67,21 @@
 //     dismiss: '关闭提示',
 //   },
 //   en: {
-//     title: 'Beware of counterfeit New API services',
+//     title: 'Beware of counterfeit build & block services',
 //     summary:
-//       'New API has never sold API access or authorized any agents or resellers. Trust only the official open-source repository.',
+//       'build & block has never sold API access or authorized any agents or resellers. Trust only the official open-source repository.',
 //     sections: [
 //       {
 //         heading: 'We have NEVER publicly sold API access — beware of scams!',
 //         body: (
 //           <>
-//             New API is a purely open-source project. We have{' '}
+//             build & block is a purely open-source project. We have{' '}
 //             <B>
 //               never authorized any organization or individual to act as an agent
 //               or reseller
 //             </B>
 //             . Anyone selling API quotas or relay services under the name
-//             &ldquo;New API Official / Partner / Self-operated&rdquo; is{' '}
+//             &ldquo;build & block Official / Partner / Self-operated&rdquo; is{' '}
 //             <B>100% fraudulent</B>.
 //           </>
 //         ),
@@ -118,17 +118,17 @@
 //     dismiss: 'Dismiss notice',
 //   },
 //   ja: {
-//     title: '偽の New API 公式サービスにご注意ください',
+//     title: '偽の build & block 公式サービスにご注意ください',
 //     summary:
-//       'New API は API を販売しておらず、代理店や再販業者も認可していません。公式のオープンソースリポジトリのみをご利用ください。',
+//       'build & block は API を販売しておらず、代理店や再販業者も認可していません。公式のオープンソースリポジトリのみをご利用ください。',
 //     sections: [
 //       {
 //         heading: '公式は API を一切販売していません — 詐欺にご注意ください！',
 //         body: (
 //           <>
-//             New API は純粋なオープンソースプロジェクトです。
+//             build & block は純粋なオープンソースプロジェクトです。
 //             <B>いかなる機関や個人にも代理販売を許可したことはありません</B>
-//             。「New API 公式 / パートナー / 自営」を名乗り API
+//             。「build & block 公式 / パートナー / 自営」を名乗り API
 //             クォータや中継サービスを販売するものは、<B>100% 偽物です</B>。
 //           </>
 //         ),

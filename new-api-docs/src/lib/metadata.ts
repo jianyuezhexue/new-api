@@ -13,7 +13,7 @@ export function createMetadata(override: Metadata): Metadata {
       description: override.description ?? undefined,
       url: 'https://www.newapi.ai',
       images: '/assets/logo.png',
-      siteName: 'New API',
+      siteName: 'build & block',
       type: 'website',
       ...override.openGraph,
     },

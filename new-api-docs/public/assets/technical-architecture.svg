@@ -7,9 +7,9 @@
   role="img"
   aria-labelledby="architecture-title architecture-description"
 >
-  <title id="architecture-title">New API technical architecture</title>
+  <title id="architecture-title">build & block technical architecture</title>
   <desc id="architecture-description">
-    New API routes requests from web consoles, SDKs, and AI applications through
+    build & block routes requests from web consoles, SDKs, and AI applications through
     a unified interface, Go backend, relay pipeline, and model adapters to many AI
     service providers. Database, Redis, Docker, and Docker Compose support the
     platform.
@@ -370,7 +370,7 @@
       <path d="M7.7 9.6L14.2 6.4M7.7 12.4L14.2 15.6" class="icon-stroke" />
     </g>
   </g>
-  <text x="102" y="58" class="title" dominant-baseline="middle">New API Architecture</text>
+  <text x="102" y="58" class="title" dominant-baseline="middle">build & block Architecture</text>
   <text x="102" y="84" class="subtitle" dominant-baseline="middle">
     A unified gateway from any client to every AI provider
   </text>

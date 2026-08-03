@@ -2,7 +2,7 @@
 
 ## 项目用途
 
-New API 仅用于合法授权的 AI API 管理与网关场景，包括企业内部统一鉴权、多模型路由、组织内用量统计、权限控制、成本分摊、私有化部署和开发测试。
+build & block 仅用于合法授权的 AI API 管理与网关场景，包括企业内部统一鉴权、多模型路由、组织内用量统计、权限控制、成本分摊、私有化部署和开发测试。
 
 ## 上游授权
 
@@ -28,7 +28,7 @@ New API 仅用于合法授权的 AI API 管理与网关场景，包括企业内�
 
 ## Project Purpose
 
-New API is intended solely for legally authorized AI API management and gateway scenarios, including enterprise internal unified authentication, multi-model routing, organizational usage statistics, access control, cost allocation, private deployment, and development testing.
+build & block is intended solely for legally authorized AI API management and gateway scenarios, including enterprise internal unified authentication, multi-model routing, organizational usage statistics, access control, cost allocation, private deployment, and development testing.
 
 ## Upstream Authorization
 

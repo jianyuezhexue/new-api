@@ -1,0 +1,65 @@
+﻿---
+title: Docker デプロイ
+---
+
+このドキュメントでは、Dockerを使用してNew APIをデプロイする詳細な手順を説明します。
+
+<Callout type="warn" title="強く推奨">
+  Dockerコンテナを手動で起動するのではなく、[Docker Compose
+  インストール方法](/ja/docs/installation/deployment-methods/docker-compose-installation)を使用することを強く推奨します。Docker
+  Compose方式は、より優れた設定管理、サービスオーケストレーション、およびデプロイ体験を提供します。
+</Callout>
+
+## 基本要件
+
+- Docker環境がインストールされていること
+- ポート: デフォルトで3000番ポートを使用
+
+## Dockerイメージを直接使用したデプロイ
+
+### PostgreSQL の使用（推奨）
+
+本番環境では PostgreSQL を優先して推奨します：
+
+```shell
+docker run --name new-api -d --restart always \
+  -p 3000:3000 \
+  -e SQL_DSN="postgresql://ユーザー名:パスワード@データベースホスト:5432/データベース名" \
+  -e TZ=Asia/Shanghai \
+  -v /your/data/path:/data \
+  calciumion/new-api:latest
+```
+
+<Callout type="info" title="データベースの選択">
+  本番環境では PostgreSQL を優先して推奨します。New API は引き続き MySQL
+  と互換性があります。SQLite はローカル評価や一時的なテスト向けです。
+</Callout>
+
+### MySQL の使用（互換）
+
+```shell
+docker run --name new-api -d --restart always \
+  -p 3000:3000 \
+  -e SQL_DSN="ユーザー名:パスワード@tcp(データベースホスト:3306)/データベース名" \
+  -e TZ=Asia/Shanghai \
+  -v /your/data/path:/data \
+  calciumion/new-api:latest
+```
+
+### SQLite の使用（テスト専用）
+
+```shell
+docker run --name new-api -d --restart always \
+  -p 3000:3000 \
+  -e TZ=Asia/Shanghai \
+  -v /your/data/path:/data \
+  calciumion/new-api:latest
+```
+
+<Callout type="warn" title="注意">
+  `/your/data/path` を、データを保存したいローカルパスに置き換えてください。
+</Callout>
+
+## システムへのアクセス
+
+デプロイが完了したら、`http://サーバーIP:3000` にアクセスすると、自動的に初期化ページに誘導されます。ページの指示に従って管理者アカウントとパスワードを手動で設定し（初回インストール時のみ必要）、完了後、新しく設定した管理者アカウントでシステムにログインできます。

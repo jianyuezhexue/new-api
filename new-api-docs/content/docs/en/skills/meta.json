@@ -1,0 +1,11 @@
+{
+  "title": "Skills",
+  "description": "New API Skills for Claude Code, Codex, and OpenClaw with usage help",
+  "icon": "Puzzle",
+  "root": true,
+  "pages": [
+    "index",
+    "newapi",
+    "newapi-admin"
+  ]
+}

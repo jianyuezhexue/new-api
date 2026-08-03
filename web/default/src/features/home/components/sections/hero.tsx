@@ -184,7 +184,7 @@ export function Hero(props: HeroProps) {
             </div>
             <div className='flex flex-wrap items-center gap-3'>
               {/* Cherry Studio */}
-              <a
+              {/* <a
                 href='https://cherry-ai.com'
                 target='_blank'
                 rel='noopener noreferrer'
@@ -192,7 +192,7 @@ export function Hero(props: HeroProps) {
               >
                 <CherryStudio.Color size={24} className='shrink-0' />
                 <span>Cherry Studio</span>
-              </a>
+              </a> */}
 
               {/* CC Switch */}
               <a

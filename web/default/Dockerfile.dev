@@ -1,0 +1,13 @@
+# 前端开发环境 — Rsbuild dev server with HMR
+FROM node:22-alpine
+
+RUN corepack enable && corepack prepare bun@latest --activate
+
+WORKDIR /app
+
+COPY package.json ./
+RUN bun install
+
+EXPOSE 3000
+
+CMD ["bun", "run", "dev"]

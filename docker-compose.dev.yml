@@ -1,12 +1,15 @@
-# 前端开发环境 — 后端从本地源码构建
+# 前后端全栈开发环境
 #
 # 使用方法:
 #   1. docker compose -f docker-compose.dev.yml up -d
-#   2. cd web && bun install && bun run dev
-#   3. 打开 http://localhost:3001（Rsbuild 开发服务器，API 自动代理到 :3000）
+#   2. 后端 API: http://localhost:3000
+#   3. 前端页面: http://localhost:3001（Rsbuild HMR，API 自动代理到后端）
 #
-# Go 代码变更后重新构建后端:
+# 后端代码变更后重新构建:
 #   docker compose -f docker-compose.dev.yml up -d --build new-api
+#
+# 前端依赖变更后重新构建:
+#   docker compose -f docker-compose.dev.yml up -d --build frontend
 #
 # 停止:
 #   docker compose -f docker-compose.dev.yml down
@@ -34,6 +37,29 @@ services:
       - TZ=Asia/Shanghai
       - BATCH_UPDATE_ENABLED=true
       - THEME=default
+    networks:
+      - dev-network
+
+  frontend:
+    build:
+      context: ./web/default
+      dockerfile: Dockerfile.dev
+    image: new-api-frontend-dev:local
+    container_name: new-api-frontend-dev
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./web/default/src:/app/src
+      - ./web/default/public:/app/public
+      - ./web/default/index.html:/app/index.html
+      - ./web/default/rsbuild.config.ts:/app/rsbuild.config.ts
+      - ./web/default/tsconfig.json:/app/tsconfig.json
+      - /app/node_modules
+    environment:
+      - VITE_REACT_APP_SERVER_URL=http://new-api:3000
+    depends_on:
+      - new-api
     networks:
       - dev-network
 

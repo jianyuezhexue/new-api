@@ -44,21 +44,49 @@ else
 fi
 
 # -------------------- 文档站点构建 --------------------
-echo "=== 构建文档站点（Next.js standalone）==="
+echo "=== 构建文档站点（Next.js standalone，仅 API 参考）==="
 cd "$SCRIPT_DIR/new-api-docs"
+
+# 只保留 API 章节，删掉其他内容源 → 编译产物体积从 900MB 降到 ~50MB
+echo "  清理非 API 内容（guide installation apps skills support business legal）..."
+for lang in zh en ja; do
+  for dir in guide installation apps skills support business legal; do
+    rm -rf "content/docs/$lang/$dir" 2>/dev/null || true
+  done
+done
+
 bun install --frozen-lockfile
 bun run build
 
-# 验证 standalone 输出
 if [ ! -f "$SCRIPT_DIR/new-api-docs/.next/standalone/server.js" ]; then
   echo "❌ 文档站点 standalone 输出缺失"
   exit 1
 fi
-echo "✅ 文档站点 standalone: $(du -sh "$SCRIPT_DIR/new-api-docs/.next/standalone" | cut -f1)"
+
+echo "=== 打包文档产物（10k+ 散文件 → 单个 tar.xz）==="
+cd "$SCRIPT_DIR/new-api-docs"
+
+# 剔除运行时不需要的构建依赖，缩小编译产物体积
+echo "  清理构建时依赖（typescript @img 等，运行时不需要）..."
+rm -rf .next/standalone/node_modules/typescript \
+       .next/standalone/node_modules/@img \
+       .next/standalone/node_modules/sharp \
+       .next/standalone/node_modules/@types
+
+# 按 Dockerfile ADD 解压后的目标布局组织文件
+rm -rf _bundle && mkdir -p _bundle
+cp -a .next/standalone/. _bundle/          # server.js + node_modules → /app/
+cp -a public _bundle/public                 # 静态资源 → /app/public/
+mkdir -p _bundle/.next && cp -a .next/static _bundle/.next/  # 编译产物 → /app/.next/static/
+cp -a openapi _bundle/openapi              # OpenAPI 规范 → /app/openapi/
+
+# xz 压缩（Docker ADD 支持 tar.xz 自动解压，压缩率高能过 GitHub 100MB 限制）
+XZ_OPT=-9e tar cJf docs-bundle.tar.xz -C _bundle .
+rm -rf _bundle
+echo "✅ docs-bundle.tar.xz: $(ls -lh "$SCRIPT_DIR/new-api-docs/docs-bundle.tar.xz" | awk '{print $5}')"
 
 # -------------------- 构建完成 --------------------
 echo ""
 echo "=== 构建完成 ==="
-echo "  release/server                ($(du -h "$SCRIPT_DIR/release/server" | cut -f1))"
-echo "  文档站点 .next/standalone     ($(du -sh "$SCRIPT_DIR/new-api-docs/.next/standalone" | cut -f1))"
-echo "  前端已通过 //go:embed 嵌入到二进制中"
+echo "  release/server              ($(du -h "$SCRIPT_DIR/release/server" | cut -f1))"
+echo "  docs-bundle.tar.xz          ($(ls -lh "$SCRIPT_DIR/new-api-docs/docs-bundle.tar.xz" | awk '{print $5}'))"

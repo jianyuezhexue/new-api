@@ -12,7 +12,7 @@ const config = {
       allowedOrigins: [
         'localhost:3000',
         // newapi.pro domains
-        'docs.newapi.pro',
+        'tokens-doc.buildingblock.top',
         'newapi.pro',
         'www.newapi.pro',
         // newapi.ai domains

@@ -232,10 +232,12 @@ export function Footer({ lang }: FooterProps) {
   const t = translations[lang] || translations.en;
   const sections = buildSections(t);
 
+  return null;
+
+  {/* TODO: Footer temporarily disabled
   return (
     <footer className="border-fd-border bg-fd-card/30 mt-auto border-t backdrop-blur-sm">
       <div className="mx-auto max-w-[1400px] px-6 py-12">
-        {/* Top: Links Grid */}
         <div className="grid grid-cols-2 gap-x-8 gap-y-10 pb-10 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12">
           {sections.map((section) => (
             <div key={section.title}>
@@ -269,9 +271,7 @@ export function Footer({ lang }: FooterProps) {
           ))}
         </div>
 
-        {/* Bottom: Copyright and Social */}
         <div className="border-fd-border flex flex-col items-start justify-between gap-4 border-t pt-8 sm:flex-row sm:items-center">
-          {/* Left: Copyright and Beian */}
           <div className="text-fd-muted-foreground flex flex-col gap-2 text-xs">
             <p>{t.copyright}</p>
             <div className="flex flex-col gap-1 sm:flex-row sm:gap-3">
@@ -289,7 +289,6 @@ export function Footer({ lang }: FooterProps) {
             </div>
           </div>
 
-          {/* Right: Social Icons */}
           <div className="flex items-center gap-4">
             {socialLinks.map((social) => {
               const isExternal = social.href.startsWith('http');
@@ -316,4 +315,5 @@ export function Footer({ lang }: FooterProps) {
       </div>
     </footer>
   );
+  */}
 }

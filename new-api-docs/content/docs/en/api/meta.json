@@ -3,5 +3,5 @@
   "description": "build & block Complete API Documentation",
   "icon": "Code",
   "root": true,
-  "pages": ["index", "ai-model", "management"]
+  "pages": ["index", "ai-model"]
 }

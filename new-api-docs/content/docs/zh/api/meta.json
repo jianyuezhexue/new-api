@@ -3,5 +3,5 @@
   "description": "build & block 接口文档",
   "icon": "Code",
   "root": true,
-  "pages": ["index", "ai-model", "management"]
+  "pages": ["index", "ai-model"]
 }

@@ -3,5 +3,5 @@
   "description": "build & block の完全なインターフェースドキュメント",
   "icon": "Code",
   "root": true,
-  "pages": ["index", "ai-model", "management"]
+  "pages": ["index", "ai-model"]
 }

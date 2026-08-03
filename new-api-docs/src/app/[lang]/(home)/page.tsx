@@ -174,7 +174,7 @@ export default async function Page({
       </div>
 
       {/* Partners Section */}
-      <section className="mx-auto mt-12 max-w-[1400px] px-4 text-center">
+      {/* <section className="mx-auto mt-12 max-w-[1400px] px-4 text-center">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {content.partnersTitle}
         </h2>
@@ -202,10 +202,10 @@ export default async function Page({
             </a>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Sponsor Partners Section */}
-      <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
+      {/* <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {content.sponsorPartnersTitle}
         </h2>
@@ -239,10 +239,10 @@ export default async function Page({
             </a>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Development Contributors Section */}
-      <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
+      {/* <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {content.devContributorsTitle}
         </h2>
@@ -261,10 +261,10 @@ export default async function Page({
             />
           </a>
         </div>
-      </section>
+      </section> */}
 
       {/* Documentation Contributors Section */}
-      <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
+      {/* <section className="mx-auto mt-16 max-w-[1400px] px-4 text-center">
         <h2 className="text-2xl font-semibold md:text-3xl">
           {content.docsContributorsTitle}
         </h2>
@@ -283,7 +283,7 @@ export default async function Page({
             />
           </a>
         </div>
-      </section>
+      </section> */}
 
       {/* <AntifraudDialog lang={lang} /> */}    </main>
   );

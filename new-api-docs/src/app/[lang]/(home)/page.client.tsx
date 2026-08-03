@@ -201,8 +201,10 @@ export function Hero() {
         <Image
           src={
             resolvedTheme === 'dark'
-              ? '/assets/dashboard-dark.png'
-              : '/assets/dashboard-light.png'
+              // ? '/assets/dashboard-dark.png'
+              // : '/assets/dashboard-light.png'
+              ? '/'
+              : '/'
           }
           alt="dashboard-preview"
           width={1200}

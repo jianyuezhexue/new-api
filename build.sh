@@ -77,7 +77,36 @@ rm -rf .next/standalone/node_modules/typescript \
 # 按 Dockerfile ADD 解压后的目标布局组织文件
 rm -rf _bundle && mkdir -p _bundle
 cp -a .next/standalone/. _bundle/          # server.js + node_modules → /app/
-cp -a public _bundle/public                 # 静态资源 → /app/public/
+
+# 只复制被构建产物引用的静态资源（剔除未引用的 assets，缩小编译产物体积）
+echo "  过滤未引用的 assets..."
+mkdir -p _bundle/public
+# 复制非 assets 的 public 文件（如 favicon.ico）
+find public -maxdepth 1 -type f -exec cp -a {} _bundle/public/ \;
+# 扫描 .next/ 构建产物，提取所有 /assets/... 引用，只复制被引用的文件/目录
+mkdir -p _bundle/public/assets
+REFERENCED_PATHS=$(grep -rohE '["'"'"']/assets/[^"'"'"'?#]+' .next/ 2>/dev/null | \
+  sed 's/^["'"'"']//;s/\\*$//' | \
+  sort -u)
+COPIED=0
+for path in $REFERENCED_PATHS; do
+  rel="${path#/assets/}"
+  src="public/assets/$rel"
+  if [ -f "$src" ]; then
+    mkdir -p "$(dirname "_bundle/public/assets/$rel")"
+    cp -a "$src" "_bundle/public/assets/$rel" && COPIED=$((COPIED + 1))
+  elif [ -d "$src" ]; then
+    mkdir -p "$(dirname "_bundle/public/assets/$rel")"
+    cp -a "$src" "_bundle/public/assets/$rel" && COPIED=$((COPIED + 1))
+  fi
+done
+echo "  ✓ 已复制 $COPIED 个被引用的 assets"
+# 兜底：如果扫描不到任何引用（极端情况），回退复制全部
+if [ $COPIED -eq 0 ]; then
+  echo "  ⚠ 未检测到 assets 引用，回退复制全部 public/assets/"
+  cp -a public/assets/. _bundle/public/assets/
+fi
+
 mkdir -p _bundle/.next && cp -a .next/static _bundle/.next/  # 编译产物 → /app/.next/static/
 cp -a openapi _bundle/openapi              # OpenAPI 规范 → /app/openapi/
 

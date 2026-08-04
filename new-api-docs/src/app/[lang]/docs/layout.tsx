@@ -49,7 +49,7 @@ export default async function Layout({
         },
       }}
     >
-      <ComplianceNotice lang={lang} />
+{/* <ComplianceNotice lang={lang} /> */}
       {children}
       <Footer lang={lang} />
       {/* AI feature temporarily disabled */}

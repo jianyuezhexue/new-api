@@ -38,6 +38,7 @@ export default async function Page(props: {
         // Disable TOC in 'full' mode (OpenAPI page) to enable two-column layout
         enabled: !page.data.full,
       }}
+      footer={{ enabled: false }}
     >
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-2">

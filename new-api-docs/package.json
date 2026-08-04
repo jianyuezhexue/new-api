@@ -7,7 +7,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
-    "postinstall": "fumadocs-mdx",
+    "postinstall": "fumadocs-mdx && bun scripts/patch-fumadocs-openapi.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "translate": "bun scripts/translate-docs.ts",

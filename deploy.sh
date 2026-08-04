@@ -155,9 +155,10 @@ verify_traffic() {
 
   for i in $(seq 1 $VERIFY_RETRIES); do
     local http_code
-    http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/api/status" 2>/dev/null || \
-                curl -s -o /dev/null -w "%{http_code}" "https://tokens.buildingblock.top/api/status" 2>/dev/null || \
-                echo "000")
+
+    # 蓝绿容器不暴露 host 端口，通过 nginx 外部域名验证
+    http_code=$(curl -s -o /dev/null -w "%{http_code}" "https://tokens.buildingblock.top/api/status" 2>/dev/null)
+    http_code="${http_code:-000}"
 
     if [ "$http_code" = "200" ]; then
       log "  ✓ 验证通过 (HTTP $http_code)"

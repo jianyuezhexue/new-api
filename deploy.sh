@@ -7,13 +7,16 @@
 #   部署时：构建新镜像 → 启动备用容器 → 等待就绪 → 切换流量 → 停止旧容器
 #
 # 用法：
-#   bash deploy.sh           # 完整流程（含 build.sh，无停机）
-#   bash deploy.sh --fast    # 跳过 build.sh（二进制未变时使用）
+#   bash deploy.sh
 #
 # 前置条件：
-#   - build.sh（首次需要构建 release/server）
+#   - 本地已执行 build.sh，产物已上传到服务器：
+#     release/server（后端二进制）
+#     new-api-docs/docs-bundle.tar.xz（文档站点）
 #   - docker compose
 #   - nginx-proxy-manager 已配置好 proxy host（指向 new-api-blue 或 new-api-green）
+#
+# 注意：永远不在服务器上构建，构建在本地完成，服务器只负责部署。
 # ================================================================
 
 set -euo pipefail
@@ -45,15 +48,15 @@ PROXY_HOST_ID="1"                       # npm proxy_host 表的 id
 HEALTH_RETRIES=30                       # 30 × 10s = 最多等 5 分钟
 HEALTH_INTERVAL=10                      # 健康检查间隔（秒）
 VERIFY_RETRIES=3                        # 切换后验证次数
-FAST_MODE=false
 
 # ── 参数解析 ──
 for arg in "$@"; do
   case "$arg" in
-    --fast|-f) FAST_MODE=true ;;
     --help|-h)
-      echo "用法: bash deploy.sh [--fast|-f] [--help|-h]"
-      echo "  --fast  跳过 build.sh，仅部署（二进制未变时使用）"
+      echo "用法: bash deploy.sh [--help|-h]"
+      echo ""
+      echo "蓝绿零停机部署。构建在本地完成，服务器只部署。"
+      echo "前置：release/server + new-api-docs/docs-bundle.tar.xz 已就位"
       exit 0
       ;;
   esac
@@ -180,14 +183,17 @@ echo -e "${CYAN}║     new-api 蓝绿部署 (Zero-Downtime)          ║${NC}"
 echo -e "${CYAN}╚══════════════════════════════════════════════╝${NC}"
 echo ""
 
-# ─── Step 1: 构建 ───
-header "Step 1: 构建"
-if $FAST_MODE; then
-  log "跳过构建 (--fast)"
-else
-  step "执行 build.sh ..."
-  bash build.sh
-  log "构建完成"
+# ─── Step 1: 检查产物 ───
+header "Step 1: 检查产物"
+
+if [ ! -f release/server ]; then
+  err "release/server 不存在，请先在本地执行 build.sh 并将产物上传到服务器"
+  exit 1
+fi
+log "✓ release/server 就位"
+
+if [ ! -f new-api-docs/docs-bundle.tar.xz ]; then
+  warn "new-api-docs/docs-bundle.tar.xz 不存在，文档站点将不会更新"
 fi
 
 # ─── Step 2: 检测状态 ───

@@ -1,6 +1,6 @@
 # 宝塔面板部署教程
 
-本文档提供使用宝塔面板 Docker 功能部署 New API 的图文教程。
+本文档提供使用宝塔面板 Docker 功能部署 build & block 的图文教程。
 
 > 📖 官方文档：[宝塔面板部署](https://tokens-doc.buildingblock.top/zh/docs/installation/deployment-methods/bt-docker-installation)
 
@@ -32,7 +32,7 @@
 
 ***
 
-## 步骤三：安装 New API
+## 步骤三：安装 build & block
 
 ### 方法一：使用宝塔应用商店（推荐）
 

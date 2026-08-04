@@ -1,6 +1,7 @@
 package openai
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,6 +13,7 @@ import (
 	"github.com/QuantumNous/new-api/dto"
 	"github.com/QuantumNous/new-api/logger"
 	relaycommon "github.com/QuantumNous/new-api/relay/common"
+	"github.com/QuantumNous/new-api/relay/channel/openrouter"
 	"github.com/QuantumNous/new-api/relay/helper"
 	"github.com/QuantumNous/new-api/service"
 	"github.com/QuantumNous/new-api/types"
@@ -284,4 +286,38 @@ func writeOpenaiImageStreamDone(c *gin.Context) error {
 		return err
 	}
 	return helper.FlushWriter(c)
+}
+
+// openRouterImageResponseHandler processes OpenRouter's dedicated Image API
+// response and converts it to the OpenAI-compatible image response format.
+func openRouterImageResponseHandler(c *gin.Context, resp *http.Response, info *relaycommon.RelayInfo) (*dto.Usage, *types.NewAPIError) {
+	defer service.CloseResponseBodyGracefully(resp)
+
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, types.NewOpenAIError(err, types.ErrorCodeReadResponseBodyFailed, http.StatusInternalServerError)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, service.RelayErrorHandler(c.Request.Context(), resp, false)
+	}
+
+	imgResp, usage, newAPIErr := openrouter.ParseImageResponse(responseBody, resp.StatusCode)
+	if newAPIErr != nil {
+		return nil, newAPIErr
+	}
+
+	jsonData, err := common.Marshal(imgResp)
+	if err != nil {
+		return nil, types.NewOpenAIError(err, types.ErrorCodeJsonMarshalFailed, http.StatusInternalServerError)
+	}
+
+	resp.Body = io.NopCloser(bytes.NewReader(jsonData))
+
+	if info.IsStream {
+		return OpenaiImageJSONAsStreamHandler(c, info, resp)
+	}
+
+	service.IOCopyBytesGracefully(c, resp, jsonData)
+	return usage, nil
 }

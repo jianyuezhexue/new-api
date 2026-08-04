@@ -17,6 +17,7 @@ import (
 	"github.com/QuantumNous/new-api/constant"
 	"github.com/QuantumNous/new-api/dto"
 	"github.com/QuantumNous/new-api/logger"
+
 	"github.com/QuantumNous/new-api/relay/channel"
 	"github.com/QuantumNous/new-api/relay/channel/ai360"
 	"github.com/QuantumNous/new-api/relay/channel/lingyiwanwu"
@@ -96,6 +97,13 @@ func (a *Adaptor) Init(info *relaycommon.RelayInfo) {
 }
 
 func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
+	// OpenRouter: route image requests to dedicated Image API
+	if info.ChannelType == constant.ChannelTypeOpenRouter &&
+		(info.RelayMode == relayconstant.RelayModeImagesGenerations ||
+			info.RelayMode == relayconstant.RelayModeImagesEdits) {
+		return strings.TrimRight(info.ChannelBaseUrl, "/") + "/v1/images", nil
+	}
+
 	if info.RelayMode == relayconstant.RelayModeRealtime {
 		if strings.HasPrefix(info.ChannelBaseUrl, "https://") {
 			baseUrl := strings.TrimPrefix(info.ChannelBaseUrl, "https://")
@@ -222,6 +230,11 @@ func (a *Adaptor) SetupRequestHeader(c *gin.Context, header *http.Header, info *
 		}
 		if header.Get("X-OpenRouter-Title") == "" {
 			header.Set("X-OpenRouter-Title", "New API")
+		}
+		// Image API requests are JSON, not multipart
+		if info.RelayMode == relayconstant.RelayModeImagesGenerations ||
+			info.RelayMode == relayconstant.RelayModeImagesEdits {
+			header.Set("Content-Type", "application/json")
 		}
 	}
 	return nil
@@ -427,6 +440,16 @@ func (a *Adaptor) ConvertAudioRequest(c *gin.Context, info *relaycommon.RelayInf
 }
 
 func (a *Adaptor) ConvertImageRequest(c *gin.Context, info *relaycommon.RelayInfo, request dto.ImageRequest) (any, error) {
+	// OpenRouter: convert to dedicated Image API format
+	if info.ChannelType == constant.ChannelTypeOpenRouter {
+		switch info.RelayMode {
+		case relayconstant.RelayModeImagesEdits:
+			return openrouter.ConvertImageEditRequest(c, &request)
+		case relayconstant.RelayModeImagesGenerations:
+			return openrouter.ConvertImageGenerationRequest(&request), nil
+		}
+	}
+
 	switch info.RelayMode {
 	case relayconstant.RelayModeImagesEdits:
 		if isJSONRequest(c) {
@@ -607,6 +630,15 @@ func (a *Adaptor) ConvertOpenAIResponsesRequest(c *gin.Context, info *relaycommo
 }
 
 func (a *Adaptor) DoRequest(c *gin.Context, info *relaycommon.RelayInfo, requestBody io.Reader) (any, error) {
+	// OpenRouter image requests: converted to JSON by ConvertImageRequest,
+	// must use DoApiRequest (not DoFormRequest)
+	isOpenRouterImage := info.ChannelType == constant.ChannelTypeOpenRouter &&
+		(info.RelayMode == relayconstant.RelayModeImagesGenerations ||
+			info.RelayMode == relayconstant.RelayModeImagesEdits)
+	if isOpenRouterImage {
+		return channel.DoApiRequest(a, c, info, requestBody)
+	}
+
 	if info.RelayMode == relayconstant.RelayModeAudioTranscription ||
 		info.RelayMode == relayconstant.RelayModeAudioTranslation ||
 		(info.RelayMode == relayconstant.RelayModeImagesEdits && !isJSONRequest(c)) {
@@ -629,7 +661,10 @@ func (a *Adaptor) DoResponse(c *gin.Context, resp *http.Response, info *relaycom
 	case relayconstant.RelayModeAudioTranscription:
 		err, usage = OpenaiSTTHandler(c, resp, info, a.ResponseFormat)
 	case relayconstant.RelayModeImagesGenerations, relayconstant.RelayModeImagesEdits:
-		if info.IsStream {
+		// OpenRouter: use dedicated Image API response format
+		if info.ChannelType == constant.ChannelTypeOpenRouter {
+			usage, err = openRouterImageResponseHandler(c, resp, info)
+		} else if info.IsStream {
 			usage, err = OpenaiImageStreamHandler(c, info, resp)
 		} else {
 			usage, err = OpenaiImageHandler(c, info, resp)

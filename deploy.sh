@@ -183,6 +183,11 @@ echo -e "${CYAN}║     new-api 蓝绿部署 (Zero-Downtime)          ║${NC}"
 echo -e "${CYAN}╚══════════════════════════════════════════════╝${NC}"
 echo ""
 
+# ─── Step 0: 拉取最新代码 ───
+header "Step 0: 拉取最新代码"
+git pull
+log "✓ 代码已更新"
+
 # ─── Step 1: 检查产物 ───
 header "Step 1: 检查产物"
 

@@ -1,17 +1,16 @@
 # New-API 生产环境 Docker Compose 配置
 #
-# new-api (后端):      bash build.sh → release/server → Dockerfile.runtime
+# new-api (后端):     零停机蓝绿部署 — bash build.sh → bash deploy.sh
 # new-api-docs (文档):  多阶段 Dockerfile，构建 & 运行均在 Docker 内完成
 #                      BuildKit 自动缓存，源码不变则秒级构建
 #
 # 快速开始:
 #   1. bash build.sh           # 构建后端 & 前端 → release/
-#   2. docker compose up -d    # 构建镜像并启动
-#   3. 访问 http://localhost:3000 / 文档 http://localhost:3001
+#   2. bash deploy.sh          # 蓝绿部署（零停机）
+#   3. 访问 https://tokens.buildingblock.top / 文档 https://tokens-doc.buildingblock.top
 #
 # 代码变更后更新:
-#   1. bash build.sh           # 仅 new-api 需要
-#   2. docker compose up -d --build
+#   bash build.sh && bash deploy.sh
 #
 # 仅更新文档:
 #   docker compose up -d --build new-api-docs
@@ -19,32 +18,34 @@
 # 停止:
 #   docker compose down
 
+x-common-env: &common-env
+  SQL_DSN: "newApi:2$$VY-VXp3WCXW&@tcp(rm-f8z9q6emj4roz3w559o.mysql.rds.aliyuncs.com:3306)/new-api"
+  REDIS_CONN_STRING: "redis://:buildingblocks@8.155.47.77:6379"
+  TZ: "Asia/Shanghai"
+  ERROR_LOG_ENABLED: "true"
+  BATCH_UPDATE_ENABLED: "true"
+  PORT: "3000"
+  THEME: "default"
+  STREAMING_TIMEOUT: "86400"
+  # SESSION_SECRET: random_string  # 多节点部署时必须设置此随机字符串
+  # LOG_SQL_DSN: root:buildingblocks@tcp(mysql:3306)/new-api-log
+
 services:
-  new-api:
+  # ── 蓝绿部署：同一时刻只有一个在接收流量 ──
+  new-api-blue:
     build:
       context: .
       dockerfile: Dockerfile.runtime
     image: new-api:latest
-    container_name: new-api
+    container_name: new-api-blue
     restart: always
     command: --log-dir /app/logs
-    ports:
-      - "3000:3000"
     environment:
-      - SQL_DSN=newApi:2$$VY-VXp3WCXW&@tcp(rm-f8z9q6emj4roz3w559o.mysql.rds.aliyuncs.com:3306)/new-api
-      - REDIS_CONN_STRING=redis://:buildingblocks@8.155.47.77:6379
-      - TZ=Asia/Shanghai
-      - ERROR_LOG_ENABLED=true
-      - BATCH_UPDATE_ENABLED=true
-      - NODE_NAME=new-api-node-1
-      - PORT=3000
-      - THEME=default
-      - STREAMING_TIMEOUT=86400
-      # - SESSION_SECRET=random_string  # 多节点部署时必须设置此随机字符串
-      # - LOG_SQL_DSN=root:buildingblocks@tcp(mysql:3306)/new-api-log
+      <<: *common-env
+      NODE_NAME: new-api-blue
     volumes:
       - ./release:/app
-      - ./logs:/app/logs
+      - ./logs/blue:/app/logs
     networks:
       - gateway
     healthcheck:
@@ -52,6 +53,30 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 60s
+
+  new-api-green:
+    build:
+      context: .
+      dockerfile: Dockerfile.runtime
+    image: new-api:latest
+    container_name: new-api-green
+    restart: always
+    command: --log-dir /app/logs
+    environment:
+      <<: *common-env
+      NODE_NAME: new-api-green
+    volumes:
+      - ./release:/app
+      - ./logs/green:/app/logs
+    networks:
+      - gateway
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   # ── 文档站点（本地预构建 .next/standalone，镜像仅包含运行时） ──
   new-api-docs:

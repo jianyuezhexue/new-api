@@ -13,6 +13,8 @@ sleep 1
 # 2. 启动后端 (端口 3000)
 echo "==> 启动后端..."
 cd "$ROOT"
+export SQL_DSN='root:buildingblocks@tcp(8.155.47.77:3306)/new-api'
+export REDIS_CONN_STRING='redis://:buildingblocks@8.155.47.77:6379'
 go run main.go &
 BACKEND_PID=$!
 

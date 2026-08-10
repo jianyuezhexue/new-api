@@ -377,14 +377,8 @@ function normalizeDetailText(detail) {
 }
 
 function getUsageLogGroupSummary(groupRatio, userGroupRatio, t) {
-  const parsedUserGroupRatio = Number(userGroupRatio);
-  const useUserGroupRatio =
-    Number.isFinite(parsedUserGroupRatio) && parsedUserGroupRatio !== -1;
-  const ratio = useUserGroupRatio ? userGroupRatio : groupRatio;
-  if (ratio === undefined || ratio === null || ratio === '') {
-    return '';
-  }
-  return `${useUserGroupRatio ? t('专属倍率') : t('分组')} ${formatRatio(ratio)}x`;
+  // 倍率展示已注释
+  return '';
 }
 
 function renderCompactDetailSummary(summarySegments) {

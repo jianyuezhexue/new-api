@@ -186,7 +186,7 @@ export function PricingSidebar(props: PricingSidebarProps) {
     ...props.groups.map((group) => ({
       value: group,
       label: group,
-      suffix: formatGroupRatio(props.groupRatios?.[group]),
+      // suffix: formatGroupRatio(props.groupRatios?.[group]),
     })),
   ]
 

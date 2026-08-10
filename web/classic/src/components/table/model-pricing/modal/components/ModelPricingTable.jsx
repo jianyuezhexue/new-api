@@ -98,18 +98,18 @@ const ModelPricingTable = ({
 
     const isDynamic = modelData?.billing_mode === 'tiered_expr';
 
-    // 动态计费时始终显示倍率列，否则根据设置
-    if (showRatio || isDynamic) {
-      columns.push({
-        title: t('分组倍率'),
-        dataIndex: 'ratio',
-        render: (text) => (
-          <Tag color='blue' size='small' shape='circle'>
-            {text}x
-          </Tag>
-        ),
-      });
-    }
+    // 倍率列已注释
+    // if (showRatio || isDynamic) {
+    //   columns.push({
+    //     title: t('分组倍率'),
+    //     dataIndex: 'ratio',
+    //     render: (text) => (
+    //       <Tag color='blue' size='small' shape='circle'>
+    //         {text}x
+    //       </Tag>
+    //     ),
+    //   });
+    // }
 
     columns.push({
       title: t('计费类型'),

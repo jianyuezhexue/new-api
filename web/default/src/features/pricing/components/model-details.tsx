@@ -991,9 +991,9 @@ function GroupPricingSection(props: {
               <div key={group} className='overflow-hidden rounded-lg border'>
                 <div className='bg-muted/20 flex items-center justify-between gap-3 border-b px-3 py-2'>
                   <GroupBadge group={group} size='sm' />
-                  <span className='text-muted-foreground font-mono text-xs'>
+                  {/* <span className='text-muted-foreground font-mono text-xs'>
                     {ratio}x
-                  </span>
+                  </span> */}
                 </div>
                 <StaticDataTable
                   className='rounded-none border-0'
@@ -1073,13 +1073,13 @@ function GroupPricingSection(props: {
             cellClassName: 'py-2.5',
             cell: (group) => <GroupBadge group={group} size='sm' />,
           },
-          {
-            id: 'ratio',
-            header: t('Ratio'),
-            className: thClass,
-            cellClassName: 'text-muted-foreground py-2.5 font-mono',
-            cell: (group) => `${props.groupRatio[group] || 1}x`,
-          },
+          // {
+          //   id: 'ratio',
+          //   header: t('Ratio'),
+          //   className: thClass,
+          //   cellClassName: 'text-muted-foreground py-2.5 font-mono',
+          //   cell: (group) => `${props.groupRatio[group] || 1}x`,
+          // },
           ...(isTokenBased
             ? [
                 {

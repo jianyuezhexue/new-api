@@ -226,7 +226,7 @@ export function useApiKeysColumns(): ColumnDef<ApiKey>[] {
             tooltipContent={group || '-'}
             tooltipClassName='break-all'
           >
-            <GroupBadge group={group} ratio={ratio} />
+            <GroupBadge group={group} />
           </TruncatedCell>
         )
       },

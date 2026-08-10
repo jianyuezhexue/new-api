@@ -153,9 +153,9 @@ export function ApiKeyGroupCombobox({
               </span>
             )}
           </span>
-          <span className='hidden sm:block'>
+          {/* <span className='hidden sm:block'>
             <GroupRatioBadge ratio={selectedOption?.ratio} />
-          </span>
+          </span> */}
         </span>
         <ChevronsUpDown className='h-4 w-4 shrink-0 opacity-50' />
       </PopoverTrigger>
@@ -197,7 +197,7 @@ export function ApiKeyGroupCombobox({
                       </span>
                     )}
                   </span>
-                  <GroupRatioBadge ratio={option.ratio} />
+                  {/* <GroupRatioBadge ratio={option.ratio} /> */}
                 </CommandItem>
               ))}
             </CommandGroup>

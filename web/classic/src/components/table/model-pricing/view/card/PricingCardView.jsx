@@ -318,8 +318,8 @@ const PricingCardView = ({
                   {/* 标签区域 */}
                   {renderTags(model)}
 
-                  {/* 倍率信息（可选） */}
-                  {showRatio && (
+                  {/* 倍率信息（已注释） */}
+                  {/* {showRatio && (
                     <div className='pt-3'>
                       <div className='flex items-center space-x-1 mb-2'>
                         <span className='text-xs font-medium text-gray-700'>
@@ -355,7 +355,7 @@ const PricingCardView = ({
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </Card>

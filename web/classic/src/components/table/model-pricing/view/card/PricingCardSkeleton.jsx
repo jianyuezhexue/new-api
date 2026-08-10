@@ -105,8 +105,8 @@ const PricingCardSkeleton = ({
               ))}
             </div>
 
-            {/* 倍率信息骨架（可选） */}
-            {showRatio && (
+            {/* 倍率信息骨架（已注释） */}
+            {/* {showRatio && (
               <div className='mt-4 pt-3 border-t border-gray-100'>
                 <div className='flex items-center space-x-1 mb-2'>
                   <Skeleton.Title
@@ -126,7 +126,7 @@ const PricingCardSkeleton = ({
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
           </Card>
         ))}
       </div>

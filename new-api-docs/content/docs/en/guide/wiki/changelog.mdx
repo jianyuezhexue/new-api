@@ -4,13 +4,66 @@ title: Changelog
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-<Callout type="warn" title="Version Log Information · Data updated at 2026-8-4 22:07:00">
+<Callout type="warn" title="Version Log Information · Data updated at 2026-8-11 01:00:18">
 To view all historical versions, please visit the [GitHub Releases page](https://github.com/QuantumNous/new-api/releases). This page automatically fetches the latest update information from that page.
 </Callout>
 
+## v1.0.0-rc.24
+
+<Callout type="info" title="Latest Release · Published at 2026-08-07 17:47:48 (UTC+8)">
+
+### Release: v1.0.0-rc.24
+
+#### New Features
+
+*   Added user critical rate limiting middleware for access token and affiliate transfer routes to enhance security and stability.
+*   Refined the categorization of fetched models in channels to improve organization and retrieval.
+
+#### Bug Fixes
+
+*   Resolved an issue with redemption code quotas experiencing precision loss, ensuring accurate credit allocation (#6685).
+*   Addressed an HTTP/2 transport issue where upstream stream resets could prevent transparent retries by correctly setting `Request.GetBody` in the relay (#6249).
+*   Ensured Claude and Gemini endpoints are tested with the native request format for improved compatibility.
+
+#### Other
+
+*   Enhanced the release synchronization workflow with optional file syncing capabilities in CI.
+
+---
+
+### What's Changed
+* fix(relay): set Request.GetBody so the HTTP/2 transport can transparently retry after an upstream stream reset by @BlockchainHe in https://github.com/QuantumNous/new-api/pull/6249
+* feat(channels): refine fetched model categorization by @seefs001 in https://github.com/QuantumNous/new-api/pull/6632
+* fix: test Claude/Gemini endpoints with native request format by @seefs001 in https://github.com/QuantumNous/new-api/pull/6698
+* fix: 修复兑换码额度精度损失(#6680) by @lihu-001 in https://github.com/QuantumNous/new-api/pull/6685
+
+### New Contributors
+* @BlockchainHe made their first contribution in https://github.com/QuantumNous/new-api/pull/6249
+* @lihu-001 made their first contribution in https://github.com/QuantumNous/new-api/pull/6685
+
+**Full Changelog**: https://github.com/QuantumNous/new-api/compare/v1.0.0-rc.23...v1.0.0-rc.24
+
+**Download Resources**
+
+<ul>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/checksums-linux.txt">checksums-linux.txt</a> (180 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/checksums-macos.txt">checksums-macos.txt</a> (93 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/checksums-windows.txt">checksums-windows.txt</a> (91 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/new-api-arm64-v1.0.0-rc.24">new-api-arm64-v1.0.0-rc.24</a> (110.1 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/new-api-macos-v1.0.0-rc.24">new-api-macos-v1.0.0-rc.24</a> (132.6 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/new-api-v1.0.0-rc.24">new-api-v1.0.0-rc.24</a> (113.2 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.24/new-api-v1.0.0-rc.24.exe">new-api-v1.0.0-rc.24.exe</a> (115.1 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v1.0.0-rc.24.zip">Source code (zip)</a></li>
+<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v1.0.0-rc.24.tar.gz">Source code (tar.gz)</a></li>
+</ul>
+
+</Callout>
+
+---
+
 ## v1.0.0-rc.23
 
-<Callout type="info" title="Latest Release · Published at 2026-08-01 23:25:04 (UTC+8)">
+<Callout type="note" title="Release · Published at 2026-08-01 23:25:04 (UTC+8)">
 
 Highlights: This release expands provider and channel compatibility with New API channels, DeepSeek Responses API support, zstd request decompression, and automatic group routing. It also improves operational accuracy with stream visibility in logs, more reliable tiered-retry billing, and upstream Bedrock cancellation when clients disconnect.
 
@@ -1673,37 +1726,6 @@ This release introduces powerful support for `expr` expression-based tiered bill
 <li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.15/new-api-v0.12.15.exe">new-api-v0.12.15.exe</a> (67.7 MB)</li>
 <li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.12.15.zip">Source code (zip)</a></li>
 <li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.12.15.tar.gz">Source code (tar.gz)</a></li>
-</ul>
-
-</Callout>
-
----
-
-## v0.12.14
-
-<Callout type="note" title="Release · Published at 2026-04-18 00:41:21 (UTC+8)">
-
-### Improvements
-- Improved user-visible management and top-up logs with a cleaner display, preserved row expansion, and clearer handling of legacy records.
-
----
-
-**Full Changelog**: https://github.com/QuantumNous/new-api/compare/v0.12.13...v0.12.14
-
-**Download Resources**
-
-<ul>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/checksums-linux.txt">checksums-linux.txt</a> (172 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/checksums-macos.txt">checksums-macos.txt</a> (89 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/checksums-windows.txt">checksums-windows.txt</a> (87 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/New-API-App.0.12.14.exe">New-API-App.0.12.14.exe</a> (106.3 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/New-API-App.Setup.0.12.14.exe">New-API-App.Setup.0.12.14.exe</a> (106.5 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/new-api-arm64-v0.12.14">new-api-arm64-v0.12.14</a> (63.6 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/new-api-macos-v0.12.14">new-api-macos-v0.12.14</a> (81.9 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/new-api-v0.12.14">new-api-v0.12.14</a> (66.0 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.12.14/new-api-v0.12.14.exe">new-api-v0.12.14.exe</a> (67.6 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.12.14.zip">Source code (zip)</a></li>
-<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.12.14.tar.gz">Source code (tar.gz)</a></li>
 </ul>
 
 </Callout>

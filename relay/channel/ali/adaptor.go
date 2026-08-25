@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/QuantumNous/new-api/common"
@@ -99,6 +100,8 @@ func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 		}
 	default:
 		switch info.RelayMode {
+		case constant.RelayModeRealtime:
+			fullRequestURL = getAliRealtimeURL(info)
 		case constant.RelayModeEmbeddings:
 			fullRequestURL = fmt.Sprintf("%s/compatible-mode/v1/embeddings", info.ChannelBaseUrl)
 		case constant.RelayModeRerank:
@@ -127,6 +130,24 @@ func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
 	}
 
 	return fullRequestURL, nil
+}
+
+// getAliRealtimeURL 构建阿里云实时语音识别（Qwen-ASR-Realtime）的 WebSocket 地址。
+// 该模型使用 OpenAI Realtime 兼容协议，但上游地址为 wss://{host}/api-ws/v1/realtime?model=...。
+func getAliRealtimeURL(info *relaycommon.RelayInfo) string {
+	host := "dashscope.aliyuncs.com"
+	base := strings.TrimSpace(info.ChannelBaseUrl)
+	if base != "" {
+		if u, err := url.Parse(base); err == nil && u.Hostname() != "" {
+			// 业务空间域名形如 [llm-]{workspaceId}.{region}.maas.aliyuncs.com，
+			// 实时 ASR 使用去掉 llm- 前缀的 wss 域名；传统域名 dashscope*.aliyuncs.com 直接复用。
+			h := strings.TrimPrefix(u.Hostname(), "llm-")
+			if strings.Contains(h, "maas.aliyuncs.com") || strings.Contains(h, "dashscope") {
+				host = h
+			}
+		}
+	}
+	return fmt.Sprintf("wss://%s/api-ws/v1/realtime?model=%s", host, url.QueryEscape(info.UpstreamModelName))
 }
 
 func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Header, info *relaycommon.RelayInfo) error {
@@ -235,6 +256,9 @@ func (a *Adaptor) ConvertOpenAIResponsesRequest(c *gin.Context, info *relaycommo
 }
 
 func (a *Adaptor) DoRequest(c *gin.Context, info *relaycommon.RelayInfo, requestBody io.Reader) (any, error) {
+	if info.RelayMode == constant.RelayModeRealtime {
+		return channel.DoWssRequest(a, c, info, requestBody)
+	}
 	return channel.DoApiRequest(a, c, info, requestBody)
 }
 

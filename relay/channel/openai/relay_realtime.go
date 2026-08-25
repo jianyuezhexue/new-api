@@ -174,6 +174,25 @@ func OpenaiRealtimeHandler(c *gin.Context, info *relaycommon.RelayInfo) (*types.
 						info.InputAudioFormat = common.GetStringIfEmpty(realtimeSession.InputAudioFormat, info.InputAudioFormat)
 						info.OutputAudioFormat = common.GetStringIfEmpty(realtimeSession.OutputAudioFormat, info.OutputAudioFormat)
 					}
+				} else if realtimeEvent.Type == dto.RealtimeEventTypeInputAudioTranscriptionCompleted {
+					// Qwen-ASR-Realtime 的 usage 携带在转写完成事件上（而非 response.done）
+					if realtimeEvent.Usage != nil {
+						usage.TotalTokens += realtimeEvent.Usage.TotalTokens
+						usage.InputTokens += realtimeEvent.Usage.InputTokens
+						usage.OutputTokens += realtimeEvent.Usage.OutputTokens
+						usage.InputTokenDetails.AudioTokens += realtimeEvent.Usage.InputTokenDetails.AudioTokens
+						usage.InputTokenDetails.CachedTokens += realtimeEvent.Usage.InputTokenDetails.CachedTokens
+						usage.InputTokenDetails.TextTokens += realtimeEvent.Usage.InputTokenDetails.TextTokens
+						usage.OutputTokenDetails.AudioTokens += realtimeEvent.Usage.OutputTokenDetails.AudioTokens
+						usage.OutputTokenDetails.TextTokens += realtimeEvent.Usage.OutputTokenDetails.TextTokens
+						if err := preConsumeUsage(c, info, usage, sumUsage); err != nil {
+							errChan <- fmt.Errorf("error consume usage: %v", err)
+							return
+						}
+						// 本次计费完成，清除
+						usage = &dto.RealtimeUsage{}
+						localUsage = &dto.RealtimeUsage{}
+					}
 				} else {
 					textToken, audioToken, err := service.CountTokenRealtime(info, *realtimeEvent, info.UpstreamModelName)
 					if err != nil {

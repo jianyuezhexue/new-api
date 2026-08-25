@@ -11,26 +11,34 @@ const (
 )
 
 const (
-	RealtimeEventTypeResponseDone                   = "response.done"
-	RealtimeEventTypeSessionUpdated                 = "session.updated"
-	RealtimeEventTypeSessionCreated                 = "session.created"
-	RealtimeEventResponseAudioDelta                 = "response.audio.delta"
-	RealtimeEventResponseAudioTranscriptionDelta    = "response.audio_transcript.delta"
-	RealtimeEventResponseFunctionCallArgumentsDelta = "response.function_call_arguments.delta"
-	RealtimeEventResponseFunctionCallArgumentsDone  = "response.function_call_arguments.done"
-	RealtimeEventConversationItemCreated            = "conversation.item.created"
+	RealtimeEventTypeResponseDone                     = "response.done"
+	RealtimeEventTypeSessionUpdated                   = "session.updated"
+	RealtimeEventTypeSessionCreated                   = "session.created"
+	RealtimeEventResponseAudioDelta                   = "response.audio.delta"
+	RealtimeEventResponseAudioTranscriptionDelta      = "response.audio_transcript.delta"
+	RealtimeEventResponseFunctionCallArgumentsDelta   = "response.function_call_arguments.delta"
+	RealtimeEventResponseFunctionCallArgumentsDone    = "response.function_call_arguments.done"
+	RealtimeEventConversationItemCreated              = "conversation.item.created"
+	RealtimeEventTypeInputAudioTranscriptionCompleted = "conversation.item.input_audio_transcription.completed"
+	RealtimeEventTypeInputAudioTranscriptionText      = "conversation.item.input_audio_transcription.text"
 )
 
 type RealtimeEvent struct {
 	EventId string `json:"event_id"`
 	Type    string `json:"type"`
 	//PreviousItemId string `json:"previous_item_id"`
-	Session  *RealtimeSession   `json:"session,omitempty"`
-	Item     *RealtimeItem      `json:"item,omitempty"`
-	Error    *types.OpenAIError `json:"error,omitempty"`
-	Response *RealtimeResponse  `json:"response,omitempty"`
-	Delta    string             `json:"delta,omitempty"`
-	Audio    string             `json:"audio,omitempty"`
+	Session    *RealtimeSession   `json:"session,omitempty"`
+	Item       *RealtimeItem      `json:"item,omitempty"`
+	Error      *types.OpenAIError `json:"error,omitempty"`
+	Response   *RealtimeResponse  `json:"response,omitempty"`
+	Delta      string             `json:"delta,omitempty"`
+	Audio      string             `json:"audio,omitempty"`
+	Transcript string             `json:"transcript,omitempty"`
+	Text       string             `json:"text,omitempty"`
+	Stash      string             `json:"stash,omitempty"`
+	Language   string             `json:"language,omitempty"`
+	ItemId     string             `json:"item_id,omitempty"`
+	Usage      *RealtimeUsage     `json:"usage,omitempty"`
 }
 
 type RealtimeResponse struct {
@@ -41,8 +49,8 @@ type RealtimeUsage struct {
 	TotalTokens        int                `json:"total_tokens"`
 	InputTokens        int                `json:"input_tokens"`
 	OutputTokens       int                `json:"output_tokens"`
-	InputTokenDetails  InputTokenDetails  `json:"input_token_details"`
-	OutputTokenDetails OutputTokenDetails `json:"output_token_details"`
+	InputTokenDetails  InputTokenDetails  `json:"input_tokens_details"`
+	OutputTokenDetails OutputTokenDetails `json:"output_tokens_details"`
 }
 
 type RealtimeSession struct {

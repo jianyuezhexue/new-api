@@ -139,10 +139,11 @@ func getAliRealtimeURL(info *relaycommon.RelayInfo) string {
 	base := strings.TrimSpace(info.ChannelBaseUrl)
 	if base != "" {
 		if u, err := url.Parse(base); err == nil && u.Hostname() != "" {
-			// 业务空间域名形如 [llm-]{workspaceId}.{region}.maas.aliyuncs.com，
-			// 实时 ASR 使用去掉 llm- 前缀的 wss 域名；传统域名 dashscope*.aliyuncs.com 直接复用。
-			h := strings.TrimPrefix(u.Hostname(), "llm-")
-			if strings.Contains(h, "maas.aliyuncs.com") || strings.Contains(h, "dashscope") {
+			h := u.Hostname()
+			// 实时 ASR 使用全局域名 dashscope*.aliyuncs.com。
+			// 业务空间专属域名（*.maas.aliyuncs.com）的 /api-ws/v1/realtime 会返回
+			// 400 Workspace endpoint is invalid，因此不从这里推导，统一回退到全局域名。
+			if strings.Contains(h, "dashscope") {
 				host = h
 			}
 		}

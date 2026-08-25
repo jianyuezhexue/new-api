@@ -27,16 +27,16 @@ func TestGetAliRealtimeURL(t *testing.T) {
 			expected: "wss://dashscope-intl.aliyuncs.com/api-ws/v1/realtime?model=qwen3-asr-flash-realtime",
 		},
 		{
-			name:     "workspace llm domain strips llm- prefix",
+			name:     "workspace llm domain falls back to global dashscope",
 			baseURL:  "https://llm-ghhs52oe6b4pzikx.cn-beijing.maas.aliyuncs.com",
 			model:    "qwen3-asr-flash-realtime-2026-02-10",
-			expected: "wss://ghhs52oe6b4pzikx.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3-asr-flash-realtime-2026-02-10",
+			expected: "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-asr-flash-realtime-2026-02-10",
 		},
 		{
-			name:     "workspace domain without llm- prefix",
+			name:     "workspace domain without llm- prefix falls back",
 			baseURL:  "https://ghhs52oe6b4pzikx.cn-beijing.maas.aliyuncs.com",
 			model:    "qwen3-asr-flash-realtime",
-			expected: "wss://ghhs52oe6b4pzikx.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3-asr-flash-realtime",
+			expected: "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-asr-flash-realtime",
 		},
 		{
 			name:     "non-dashscope base url falls back to dashscope",

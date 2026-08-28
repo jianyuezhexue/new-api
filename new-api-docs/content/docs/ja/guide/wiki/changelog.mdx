@@ -4,13 +4,62 @@ title: 変更履歴
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-<Callout type="warn" title="バージョンログ情報 · データ更新日時 2026-8-25 18:42:08">
+<Callout type="warn" title="バージョンログ情報 · データ更新日時 2026-8-28 16:29:56">
 すべての履歴バージョンを表示するには、[GitHub Releases ページ](https://github.com/QuantumNous/new-api/releases)をご覧ください。このページは定期的に最新の更新情報を取得します。
 </Callout>
 
+## v1.0.0-rc.26
+
+<Callout type="info" title="最新リリース版 · 公開日 2026-08-26 21:10:03 (UTC+8)">
+
+### ⚠️ Important Warnings / 重要警告
+
+* **Database Migration Risk / 数据库迁移风险**: This release changes quota fields to support values larger than 4,294,967,295. Upon startup, the system will check database table structures. Startup may fail if the column types are incorrect. In such cases, manual modification is required (instructions will be in the error message; consult AI if unsure how to proceed).
+本次更新修复了额度上限问题，支持大于 42 亿的数值。启动时系统会检测数据库表结构，如果不匹配可能会导致启动失败。遇到此问题需根据错误提示手动修改数据库表结构（如不熟悉数据库操作，可寻求 AI 辅助）。
+
+* **Deprecation of 32-bit Systems / 废弃 32 位系统支持**: Support for 32-bit operating systems has been temporarily deprecated to accommodate these changes.
+为配合上述更改，我们已“临时”废弃对 32 位操作系统架构的支持。
+
+### New Features
+* Added support for `thinking_token_budget` in vLLM (#7027)
+
+### Bug Fixes
+* Prevented browser auto-fill from incorrectly populating credentials in usage log filters (#6966)
+
+### Improvements
+* Removed 32-bit integer limitations to allow quota values to exceed 4294 million (#7025)
+
+---
+
+### What's Changed
+* refactor(web): prevent credential autofill in usage log filters by @seefs001 in https://github.com/QuantumNous/new-api/pull/6966
+* refactor: deprecate int32 by @seefs001 in https://github.com/QuantumNous/new-api/pull/7025
+* feat: vllm thinking_token_budget by @seefs001 in https://github.com/QuantumNous/new-api/pull/7027
+
+
+**Full Changelog**: https://github.com/QuantumNous/new-api/compare/v1.0.0-rc.25...v1.0.0-rc.26
+
+**Download Resources**
+
+<ul>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/checksums-linux.txt">checksums-linux.txt</a> (180 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/checksums-macos.txt">checksums-macos.txt</a> (93 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/checksums-windows.txt">checksums-windows.txt</a> (91 B)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/new-api-arm64-v1.0.0-rc.26">new-api-arm64-v1.0.0-rc.26</a> (110.2 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/new-api-macos-v1.0.0-rc.26">new-api-macos-v1.0.0-rc.26</a> (132.8 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/new-api-v1.0.0-rc.26">new-api-v1.0.0-rc.26</a> (113.4 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/releases/download/v1.0.0-rc.26/new-api-v1.0.0-rc.26.exe">new-api-v1.0.0-rc.26.exe</a> (115.2 MB)</li>
+<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v1.0.0-rc.26.zip">Source code (zip)</a></li>
+<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v1.0.0-rc.26.tar.gz">Source code (tar.gz)</a></li>
+</ul>
+
+</Callout>
+
+---
+
 ## v1.0.0-rc.25
 
-<Callout type="info" title="最新リリース版 · 公開日 2026-08-18 18:58:54 (UTC+8)">
+<Callout type="note" title="リリース版 · 公開日 2026-08-18 18:58:54 (UTC+8)">
 
 ### Highlights
 Channel testing and gateway administration gain safer workflows, user/group-aware overrides, and request-field passthrough controls. This release also improves provider compatibility, Responses API accounting, and recharge/quota reliability.
@@ -1703,75 +1752,6 @@ This patch adds support for using `len` in tier conditions and the LLM prompt he
 <li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.1/new-api-v0.13.1.exe">new-api-v0.13.1.exe</a> (68.6 MB)</li>
 <li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.13.1.zip">Source code (zip)</a></li>
 <li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.13.1.tar.gz">Source code (tar.gz)</a></li>
-</ul>
-
-</Callout>
-
----
-
-## v0.13.0
-
-<Callout type="note" title="リリース版 · 公開日 2026-04-24 14:09:21 (UTC+8)">
-
-### Highlights
-This release introduces powerful support for `expr` expression-based tiered billing, allowing administrators to configure complex, dynamic pricing rules. A simple use case for this feature is a pricing expression like `tokens <= 128000 ? 0.002 : 0.004`, where the system will automatically apply a lower rate for usage under 128K tokens and a higher rate for anything above that threshold.
-
-### New Features
-* Introduces support for evaluating `expr` expressions in the billing system, enabling dynamic tiered pricing with configurable presets (#4409).
-* Adds a UI for tool pricing settings and improves tool call quota calculations.
-* Displays the user ID in admin top-up bills for easier tracking (#4349).
-* Adds a 'last used time' column to the tokens table (#4372).
-* Relaxes token key column length requirements to support the migration of longer legacy token keys (#4401).
-
-### Bug Fixes
-* Ensures the pricing calculation logic only applies the N ratio to image models (#4412).
-* Preserves text tool surcharges properly during tiered billing settlement (#4162).
-* Corrects the completion ratio configuration for the `gpt-5.5` model (#4414).
-* Fixes the model pricing UI to use the correct display type (#4426).
-* Resolves runtime crashes and edge cases within the tiered pricing editor and settlement logic.
-* Updates channel testing to properly support and evaluate tiered billing models.
-
-### Improvements
-* Adds preset pricing tiers for Doubao Seed 1.8 to enhance discount calculations.
-* Replaces Card components with divs to improve overall layout consistency.
-* Updates internal billing calculations to use quota per unit for better accuracy.
-
----
-
-### What's Changed
-* fix(channel-test): support tiered billing model tests by @yyhhyyyyyy in https://github.com/QuantumNous/new-api/pull/4145
-* 在管理员充值账单中显示用户 ID by @uskyu in https://github.com/QuantumNous/new-api/pull/4349
-* 增加令牌最后使用时间 by @feitianbubu in https://github.com/QuantumNous/new-api/pull/4372
-* chore(deps): bump github.com/jackc/pgx/v5 from 5.9.0 to 5.9.2 by @dependabot[bot] in https://github.com/QuantumNous/new-api/pull/4397
-* chore(deps-dev): bump @xmldom/xmldom from 0.8.12 to 0.8.13 in /electron by @dependabot[bot] in https://github.com/QuantumNous/new-api/pull/4399
-* Relax token key column length for legacy migration compatibility by @XiaoAI1024 in https://github.com/QuantumNous/new-api/pull/4401
-* fix(billing): preserve text tool surcharges in tiered settlement by @yyhhyyyyyy in https://github.com/QuantumNous/new-api/pull/4162
-* feat: support for tiered billing expressions in the billing system by @Calcium-Ion in https://github.com/QuantumNous/new-api/pull/4409
-* fix(image): only price image model use N ratio by @xyfacai in https://github.com/QuantumNous/new-api/pull/4412
-* fix: correct gpt-5.5 completion ratio by @jingx8885 in https://github.com/QuantumNous/new-api/pull/4414
-* fix: model pricing use correct display type by @feitianbubu in https://github.com/QuantumNous/new-api/pull/4426
-
-### New Contributors
-* @uskyu made their first contribution in https://github.com/QuantumNous/new-api/pull/4349
-* @XiaoAI1024 made their first contribution in https://github.com/QuantumNous/new-api/pull/4401
-* @jingx8885 made their first contribution in https://github.com/QuantumNous/new-api/pull/4414
-
-**Full Changelog**: https://github.com/QuantumNous/new-api/compare/v0.12.15...v0.13.0
-
-**Download Resources**
-
-<ul>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/checksums-linux.txt">checksums-linux.txt</a> (170 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/checksums-macos.txt">checksums-macos.txt</a> (88 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/checksums-windows.txt">checksums-windows.txt</a> (86 B)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/New-API-App.0.13.0.exe">New-API-App.0.13.0.exe</a> (106.5 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/New-API-App.Setup.0.13.0.exe">New-API-App.Setup.0.13.0.exe</a> (106.8 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/new-api-arm64-v0.13.0">new-api-arm64-v0.13.0</a> (64.6 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/new-api-macos-v0.13.0">new-api-macos-v0.13.0</a> (83.2 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/new-api-v0.13.0">new-api-v0.13.0</a> (66.9 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/releases/download/v0.13.0/new-api-v0.13.0.exe">new-api-v0.13.0.exe</a> (68.6 MB)</li>
-<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.13.0.zip">Source code (zip)</a></li>
-<li><a href="https://github.com/QuantumNous/new-api/archive/refs/tags/v0.13.0.tar.gz">Source code (tar.gz)</a></li>
 </ul>
 
 </Callout>

@@ -101,6 +101,7 @@ export function SettingsPageActionsPortal(
 type SettingsPageFormActionsProps = {
   onSave: () => void
   onReset?: () => void
+  beforeReset?: ReactNode
   isSaving?: boolean
   isSaveDisabled?: boolean
   isResetDisabled?: boolean
@@ -119,6 +120,7 @@ export function SettingsPageFormActions(props: SettingsPageFormActionsProps) {
 
   return (
     <SettingsPageActionsPortal>
+      {props.beforeReset}
       {props.onReset && (
         <Button
           type='button'

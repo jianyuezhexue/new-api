@@ -17,9 +17,13 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import * as z from 'zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import { DEFAULT_CURRENCY_CONFIG } from '@/stores/system-config-store'
 import {
   Form,
@@ -49,6 +53,7 @@ import {
 } from '../components/settings-form-layout'
 import { SettingsPageFormActions } from '../components/settings-page-context'
 import { SettingsSection } from '../components/settings-section'
+import { refreshUSDExchangeRate } from '../api'
 import { useSettingsForm } from '../hooks/use-settings-form'
 import { useUpdateOption } from '../hooks/use-update-option'
 import { safeNumberFieldProps } from '../utils/numeric-field'
@@ -60,6 +65,7 @@ const createPricingSchema = (t: (key: string) => string) =>
       USDExchangeRate: z.coerce
         .number()
         .min(0.0001, t('Exchange rate must be greater than 0')),
+      USDExchangeRateAutoUpdateEnabled: z.boolean(),
       DisplayInCurrencyEnabled: z.boolean(),
       DisplayTokenStatEnabled: z.boolean(),
       general_setting: z.object({
@@ -102,6 +108,22 @@ type PricingSectionProps = {
 export function PricingSection({ defaultValues }: PricingSectionProps) {
   const { t } = useTranslation()
   const updateOption = useUpdateOption()
+  const queryClient = useQueryClient()
+  const refreshExchangeRate = useMutation({
+    mutationFn: refreshUSDExchangeRate,
+    onSuccess: (data) => {
+      if (!data.success) {
+        toast.error(data.message || t('Failed to update setting'))
+        return
+      }
+      queryClient.invalidateQueries({ queryKey: ['system-options'] })
+      queryClient.invalidateQueries({ queryKey: ['status'] })
+      toast.success(t('Exchange rate updated successfully'))
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || t('Failed to update setting'))
+    },
+  })
 
   const pricingSchema = createPricingSchema(t)
 
@@ -152,6 +174,27 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
             <SettingsPageFormActions
               onSave={handleSubmit}
               onReset={handleReset}
+              beforeReset={
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='outline'
+                  onClick={() => refreshExchangeRate.mutate()}
+                  disabled={refreshExchangeRate.isPending}
+                >
+                  <RefreshCw
+                    data-icon='inline-start'
+                    className={refreshExchangeRate.isPending ? 'animate-spin' : undefined}
+                  />
+                  <span>
+                    {t(
+                      refreshExchangeRate.isPending
+                        ? 'Updating Exchange Rate...'
+                        : 'Update Exchange Rate'
+                    )}
+                  </span>
+                </Button>
+              }
               isSaving={updateOption.isPending || isSubmitting}
               isResetDisabled={!isDirty}
             />
@@ -228,34 +271,62 @@ export function PricingSection({ defaultValues }: PricingSectionProps) {
             />
 
             {displayType !== 'TOKENS' && (
-              <FormField
-                control={form.control}
-                name='USDExchangeRate'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {displayType === 'CNY'
-                        ? t('CNY per USD')
-                        : displayType === 'USD'
-                          ? t('USD Exchange Rate')
-                          : t('USD Exchange Rate')}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type='number'
-                        step='0.01'
-                        {...safeNumberFieldProps(field)}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      {t(
-                        'Real exchange rate between USD and your payment gateway currency'
-                      )}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+              <>
+                <FormField
+                  control={form.control}
+                  name='USDExchangeRate'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {displayType === 'CNY'
+                          ? t('CNY per USD')
+                          : displayType === 'USD'
+                            ? t('USD Exchange Rate')
+                            : t('USD Exchange Rate')}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='number'
+                          step='0.01'
+                          {...safeNumberFieldProps(field)}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {t(
+                          'Real exchange rate between USD and your payment gateway currency'
+                        )}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {displayType === 'CNY' && (
+                  <FormField
+                    control={form.control}
+                    name='USDExchangeRateAutoUpdateEnabled'
+                    render={({ field }) => (
+                      <SettingsSwitchItem>
+                        <SettingsSwitchContent>
+                          <FormLabel>
+                            {t('Automatically update USD/CNY exchange rate')}
+                          </FormLabel>
+                          <FormDescription>
+                            {t(
+                              'Fetches CFETS/SAFE central parity at 09:20 (Asia/Shanghai) each business day. Recharge prices are not changed.'
+                            )}
+                          </FormDescription>
+                        </SettingsSwitchContent>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </SettingsSwitchItem>
+                    )}
+                  />
                 )}
-              />
+              </>
             )}
 
             {displayType === 'CUSTOM' && (

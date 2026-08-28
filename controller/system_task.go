@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/QuantumNous/new-api/common"
 	"github.com/QuantumNous/new-api/model"
@@ -10,6 +11,28 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
+func RefreshUSDExchangeRate(c *gin.Context) {
+	loc := shanghaiLocation
+	if loc == nil {
+		loc = time.FixedZone("CST", 8*60*60)
+	}
+	result, err := refreshUSDExchangeRate(c.Request.Context(), time.Now().In(loc).Format(time.DateOnly))
+	if err != nil {
+		common.ApiError(c, err)
+		return
+	}
+	recordManageAudit(c, "exchange_rate.refresh", map[string]interface{}{
+		"source":      result.Source,
+		"source_date": result.SourceDate,
+		"changed":     result.Changed,
+	})
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "",
+		"data":    result,
+	})
+}
 
 func CreateLogCleanupSystemTask(c *gin.Context) {
 	targetTimestamp, _ := strconv.ParseInt(c.Query("target_timestamp"), 10, 64)

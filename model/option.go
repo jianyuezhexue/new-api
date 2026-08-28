@@ -82,6 +82,10 @@ func InitOptionMap() {
 	common.OptionMap["EpayKey"] = ""
 	common.OptionMap["Price"] = strconv.FormatFloat(operation_setting.Price, 'f', -1, 64)
 	common.OptionMap["USDExchangeRate"] = strconv.FormatFloat(operation_setting.USDExchangeRate, 'f', -1, 64)
+	common.OptionMap["USDExchangeRateAutoUpdateEnabled"] = "true"
+	common.OptionMap["USDExchangeRateLastSource"] = ""
+	common.OptionMap["USDExchangeRateLastSourceDate"] = ""
+	common.OptionMap["USDExchangeRateLastUpdatedAt"] = ""
 	common.OptionMap["MinTopUp"] = strconv.Itoa(operation_setting.MinTopUp)
 	common.OptionMap["StripeMinTopUp"] = strconv.Itoa(setting.StripeMinTopUp)
 	common.OptionMap["StripeApiSecret"] = setting.StripeApiSecret

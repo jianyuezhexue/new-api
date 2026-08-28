@@ -39,6 +39,20 @@ export type UpdateOptionResponse = {
   message: string
 }
 
+export type USDExchangeRateRefreshResult = {
+  source: string
+  source_date: string
+  old_rate: number
+  new_rate: number
+  changed: boolean
+}
+
+export type USDExchangeRateRefreshResponse = {
+  success: boolean
+  message: string
+  data?: USDExchangeRateRefreshResult
+}
+
 export type ConfirmPaymentComplianceResponse = {
   success: boolean
   message: string
@@ -254,6 +268,7 @@ export type BillingSettings = {
   'quota_setting.enable_free_model_pre_consume': boolean
   QuotaPerUnit: number
   USDExchangeRate: number
+  USDExchangeRateAutoUpdateEnabled: boolean
   'general_setting.quota_display_type': string
   'general_setting.custom_currency_symbol': string
   'general_setting.custom_currency_exchange_rate': number

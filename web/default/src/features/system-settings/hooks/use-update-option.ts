@@ -31,6 +31,7 @@ const STATUS_RELATED_KEYS = [
   'LogConsumeEnabled',
   'QuotaPerUnit',
   'USDExchangeRate',
+  'USDExchangeRateAutoUpdateEnabled',
   'DisplayInCurrencyEnabled',
   'DisplayTokenStatEnabled',
   'general_setting.quota_display_type',

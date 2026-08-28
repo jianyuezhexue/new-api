@@ -46,6 +46,14 @@ type ScheduledSystemTaskHandler interface {
 	NewPayload() any
 }
 
+// TimeScheduledSystemTaskHandler is an optional extension for tasks that need
+// to run at a wall-clock time instead of simply waiting a fixed interval after
+// their previous execution. The scheduler still owns active-task deduplication.
+type TimeScheduledSystemTaskHandler interface {
+	ScheduledSystemTaskHandler
+	ShouldSchedule(now time.Time, latest *model.SystemTask) bool
+}
+
 var (
 	systemTaskHandlersMu sync.RWMutex
 	systemTaskHandlers   = map[string]SystemTaskHandler{}
@@ -262,6 +270,7 @@ func runSystemTaskClaimPass(runnerID string) {
 // the per-type lock guarantees only one runner executes the task.
 func runSystemTaskScheduler() {
 	now := common.GetTimestamp()
+	schedulerNow := time.Now()
 	handlers := registeredSystemTaskHandlers()
 	scheduledHandlers := make([]ScheduledSystemTaskHandler, 0, len(handlers))
 	taskTypes := make([]string, 0, len(handlers))
@@ -284,9 +293,13 @@ func runSystemTaskScheduler() {
 			if latest.Status == model.SystemTaskStatusPending || latest.Status == model.SystemTaskStatusRunning {
 				continue // an active row already exists
 			}
-			if now-latest.UpdatedAt < int64(scheduled.Interval().Seconds()) {
-				continue // not due yet
+		}
+		if timeScheduled, ok := scheduled.(TimeScheduledSystemTaskHandler); ok {
+			if !timeScheduled.ShouldSchedule(schedulerNow, latest) {
+				continue
 			}
+		} else if latest != nil && now-latest.UpdatedAt < int64(scheduled.Interval().Seconds()) {
+			continue // not due yet
 		}
 		if _, err := model.CreateSystemTask(scheduled.Type(), scheduled.NewPayload(), nil); err != nil {
 			activeTask, activeErr := model.GetActiveSystemTask(scheduled.Type())

@@ -327,6 +327,19 @@ func GetUser(c *gin.Context) {
 		return
 	}
 	user, err := model.GetUserById(id, false)
+	respondManagedUser(c, user, err)
+}
+
+// GetUserByUsername returns one user's details using the username supplied in
+// the user_id path parameter. The route name intentionally follows the public
+// API contract: GET /api/user/username/:user_id.
+func GetUserByUsername(c *gin.Context) {
+	username := c.Param("user_id")
+	user, err := model.GetUserByUsername(username, false)
+	respondManagedUser(c, user, err)
+}
+
+func respondManagedUser(c *gin.Context, user *model.User, err error) {
 	if err != nil {
 		common.ApiError(c, err)
 		return

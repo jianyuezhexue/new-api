@@ -308,6 +308,22 @@ func GetUserById(id int, selectAll bool) (*User, error) {
 	return &user, err
 }
 
+// GetUserByUsername finds a user by their exact login username.
+func GetUserByUsername(username string, selectAll bool) (*User, error) {
+	username = strings.TrimSpace(username)
+	if username == "" {
+		return nil, errors.New("username 为空！")
+	}
+	user := User{}
+	var err error
+	if selectAll {
+		err = DB.First(&user, "username = ?", username).Error
+	} else {
+		err = DB.Omit("password").First(&user, "username = ?", username).Error
+	}
+	return &user, err
+}
+
 func GetUserIdByAffCode(affCode string) (int, error) {
 	if affCode == "" {
 		return 0, errors.New("affCode 为空！")
